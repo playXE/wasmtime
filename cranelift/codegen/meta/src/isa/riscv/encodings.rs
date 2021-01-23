@@ -122,6 +122,7 @@ pub(crate) fn define<'defs>(
     let brnz = shared.by_name("brnz");
     let bxor = shared.by_name("bxor");
     let bxor_imm = shared.by_name("bxor_imm");
+    let tail_call = shared.by_name("tail_call");
     let call = shared.by_name("call");
     let call_indirect = shared.by_name("call_indirect");
     let copy = shared.by_name("copy");

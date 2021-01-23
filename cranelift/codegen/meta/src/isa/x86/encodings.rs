@@ -2524,6 +2524,7 @@ fn define_control_flow(
     let brif = shared.by_name("brif");
     let brnz = shared.by_name("brnz");
     let brz = shared.by_name("brz");
+    let tail_call = shared.by_name("return");
     let call = shared.by_name("call");
     let call_indirect = shared.by_name("call_indirect");
     let debugtrap = shared.by_name("debugtrap");
@@ -2542,6 +2543,7 @@ fn define_control_flow(
     let rec_brfd = r.template("brfd");
     let rec_brib = r.template("brib");
     let rec_brid = r.template("brid");
+    let rec_tail_call_id = r.template("tail_call");
     let rec_call_id = r.template("call_id");
     let rec_call_plt_id = r.template("call_plt_id");
     let rec_call_r = r.template("call_r");
@@ -2591,6 +2593,19 @@ fn define_control_flow(
         rec_call_r.opcodes(&JUMP_ABSOLUTE).rrr(2),
     );
 
+    /*e.enc64_isap(
+        tail_call,
+        rec_call_plt_id.opcodes(&JUMP_NEAR_RELATIVE),
+        is_pic,
+    );
+    let is_colocated_func = InstructionPredicate::new_is_colocated_func(&*formats.call, "func_ref");
+    e.enc64_instp(
+        tail_call,
+        rec_call_plt_id.opcodes(&JUMP_NEAR_RELATIVE),
+        is_colocated_func,
+    );*/
+    e.enc64(tail_call, rec_tail_call_id.opcodes(&JUMP_ABSOLUTE));
+    e.enc32(tail_call, rec_tail_call_id.opcodes(&JUMP_ABSOLUTE));
     e.enc32(return_, rec_ret.opcodes(&RET_NEAR));
     e.enc64(return_, rec_ret.opcodes(&RET_NEAR));
 

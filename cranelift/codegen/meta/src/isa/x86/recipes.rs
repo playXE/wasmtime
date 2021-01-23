@@ -2475,6 +2475,21 @@ pub(crate) fn define<'shared>(
     );
 
     recipes.add_template_recipe(
+        EncodingRecipeBuilder::new("tail_call", &formats.tail_call, 4).emit(
+            r#"
+                sink.trap(TrapCode::StackOverflow, func.srclocs[inst]);
+                {{PUT_OP}}(bits, BASE_REX, sink);
+                sink.reloc_external(func.srclocs[inst],
+                                    Reloc::X86PCRel4,
+                                    &func.dfg.ext_funcs[func_ref].name,
+                                    -4);
+                sink.put4(0);
+                sink.add_call_site(opcode, func.srclocs[inst]);
+            "#,
+        ),
+    );
+
+    recipes.add_template_recipe(
         EncodingRecipeBuilder::new("ret", &formats.multiary, 0)
             .emit("{{PUT_OP}}(bits, BASE_REX, sink);"),
     );

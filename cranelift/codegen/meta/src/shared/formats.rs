@@ -15,6 +15,7 @@ pub(crate) struct Formats {
     pub(crate) branch_table: Rc<InstructionFormat>,
     pub(crate) branch_table_base: Rc<InstructionFormat>,
     pub(crate) branch_table_entry: Rc<InstructionFormat>,
+    pub(crate) tail_call: Rc<InstructionFormat>,
     pub(crate) call: Rc<InstructionFormat>,
     pub(crate) call_indirect: Rc<InstructionFormat>,
     pub(crate) cond_trap: Rc<InstructionFormat>,
@@ -192,7 +193,10 @@ impl Formats {
                 .value()
                 .imm(&entities.jump_table)
                 .build(),
-
+            tail_call: Builder::new("tail_call")
+                .imm(&entities.func_ref)
+                .varargs()
+                .build(),
             call: Builder::new("Call")
                 .imm(&entities.func_ref)
                 .varargs()

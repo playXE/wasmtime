@@ -427,7 +427,28 @@ fn define_control_flow(
         .is_return(true)
         .is_terminator(true),
     );
+    let rvals = &Operand::new("rvals", &entities.varargs).with_doc("return values");
+    let args = &Operand::new("args", &entities.varargs).with_doc("call arguments");
+    let FN = &Operand::new("FN", &entities.func_ref)
+        .with_doc("function to call, declared by `function`");
+    ig.push(
+        Inst::new(
+            "tail_call",
+            r#"
+    Tail call function using current stack frame.
 
+    Unconditionally jump to function passing the provided arguments. The calling function
+    list of return values must match with the list of function signature's return types.
+    
+
+    "#,
+            &formats.call,
+        )
+        .operands_in(vec![FN, args])
+        .operands_out(vec![rvals])
+        .is_return(true)
+        .is_terminator(true),
+    );
     let FN = &Operand::new("FN", &entities.func_ref)
         .with_doc("function to call, declared by `function`");
     let args = &Operand::new("args", &entities.varargs).with_doc("call arguments");
